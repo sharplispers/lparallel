@@ -56,15 +56,20 @@ user receives the return value of this function."
      ;; Most objects unwrap to themselves.
      result)))
 
+(deftype handler-binding-condition-type ()
+  `(or symbol (cons symbol)))
+
 (defmacro task-handler-bind (clauses &body body)
   "Like `handler-bind' but handles conditions signaled inside tasks
 that were created in `body'."
   (let ((forms (loop for clause in clauses
-                     for (name fn . more) = clause
-                     do (unless (and name (symbolp name) fn (not more))
+                     for (type handler . more) = clause
+                     do (unless (and (typep type 'handler-binding-condition-type)
+                                     handler
+                                     (not more))
                           (error "Ill-formed binding in `task-handler-bind': ~a"
                                  clause))
-                     collect `(cons ',name ,fn))))
+                     collect `(cons ',type ,handler))))
     `(let ((*client-handlers* (list* ,@forms *client-handlers*)))
        ,@body)))
 

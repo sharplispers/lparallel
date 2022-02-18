@@ -504,7 +504,7 @@
     (is (equal '(inner outer)
                (extract-queue q)))))
 
-(base-test task-handler-bind-syntax-test
+(base-test task-handler-bind-syntax-error-test
   (signals error
     (macroexpand '(task-handler-bind ((())))))
   (signals error
@@ -513,6 +513,22 @@
     (macroexpand '(task-handler-bind ((x)))))
   (signals error
     (macroexpand '(task-handler-bind ((x y z))))))
+
+(full-test task-handler-bind-syntax-test
+  (flet ((do-it (condition-type)
+           (task-handler-bind (((and condition (not foo-condition-2))
+                                #'continue))
+             (let ((channel (make-channel)))
+               (submit-task channel (lambda ()
+                                      (restart-case
+                                          (progn
+                                            (signal condition-type)
+                                            :not-handled)
+                                        (continue ()
+                                          :handled))))
+               (receive-result channel)))))
+    (is (eq :handled     (do-it 'foo-condition-1)))
+    (is (eq :not-handled (do-it 'foo-condition-2)))))
 
 (full-test print-kernel-test
   (is (plusp (length (with-output-to-string (s)
