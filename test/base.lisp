@@ -105,5 +105,6 @@
   (handler-bind (((or warning
                       #+ecl c:compiler-note
                       #+sbcl sb-ext:compiler-note)
-                  #'muffle-warning))
-    (apply #'compile args)))
+                   #'muffle-warning))
+    (with-compilation-unit (:override t)
+      (apply #'compile args))))
