@@ -57,12 +57,13 @@
       (setf *failed-random-state* nil))))
 
 (defun report (test-count pass-count)
-  (format t "~&Success: ~s test~:p, ~s check~:p.~%" test-count pass-count))
+  (format t "~@:_Success: ~s test~:p, ~s check~:p.~@:_" test-count pass-count))
 
 (defun %run (fn test-count)
   (let ((*pass-count* 0))
-    (multiple-value-prog1 (call-with-random-state fn)
-      (report test-count *pass-count*))))
+    (pprint-logical-block (*standard-output* '())
+      (multiple-value-prog1 (call-with-random-state fn)
+        (report test-count *pass-count*)))))
 
 (defun run (&optional (tests *tests*))
   "Run each test in the sequence `tests'. Default is `*tests*'."
@@ -72,7 +73,7 @@
   (values))
 
 (defun call-test (name fn)
-  (format t "~&~s" name)
+  (format t "~@:_~s" name)
   (finish-output)
   (if *running*
       (funcall fn)
@@ -87,7 +88,7 @@
      ',name))
 
 (defun passed ()
-  (write-char #\.)
+  (format t "~:_.")
   ;; Checks done outside a test run are not tallied.
   (when *pass-count*
     (incf *pass-count*))
