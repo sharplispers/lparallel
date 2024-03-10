@@ -28,7 +28,7 @@
 ;;; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ;;; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(in-package #:lparallel-test)
+(in-package :lparallel/test)
 
 (define-condition client-error (error) ())
 (define-condition foo-error (error) ())

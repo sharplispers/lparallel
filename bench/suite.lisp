@@ -28,7 +28,7 @@
 ;;; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ;;; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(in-package #:lparallel-bench)
+(in-package :lparallel/bench)
 
 (defparameter *trials* 12)
 
@@ -289,7 +289,7 @@
 
 (defun select-benches (fn-names)
   (mapcar (lambda (name)
-            (assoc (intern (symbol-name name) :lparallel-bench)
+            (assoc (intern (symbol-name name) :lparallel/bench)
                    *benches*))
           fn-names))
 

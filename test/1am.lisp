@@ -30,11 +30,11 @@
 
 ;;; See https://github.com/lmj/1am
 
-(defpackage #:lparallel-test.1am
+(defpackage #:lparallel/test.1am
   (:use #:cl)
   (:export #:test #:is #:signals #:run #:*tests*))
 
-(in-package #:lparallel-test.1am)
+(in-package #:lparallel/test.1am)
 
 (defvar *tests* nil "A list of tests; the default argument to `run'.")
 (defvar *pass-count* nil)

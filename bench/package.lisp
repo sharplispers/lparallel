@@ -28,7 +28,7 @@
 ;;; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ;;; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(defpackage #:lparallel-bench
+(defpackage :lparallel/bench
   (:documentation
    "Benchmarks for lparallel.")
   (:use #:cl
@@ -50,7 +50,4 @@
                 #:compose
                 #:flatten))
 
-#+sbcl
-(require :sb-sprof)
-
-(in-package #:lparallel-bench)
+(in-package :lparallel/bench)

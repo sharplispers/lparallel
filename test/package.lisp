@@ -28,7 +28,7 @@
 ;;; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ;;; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(defpackage #:lparallel-test
+(defpackage :lparallel/test
   (:documentation
    "Test suite for lparallel.")
   (:use #:cl
@@ -42,9 +42,9 @@
         #:lparallel.defpun
         #:lparallel.promise
         #:lparallel.ptree
-        #:lparallel-test.1am)
+        #:lparallel/test.1am)
   (:import-from #:lparallel.kernel-util
                 #:with-temp-kernel)
   (:export #:execute))
 
-(in-package #:lparallel-test)
+(in-package :lparallel/test)

@@ -28,10 +28,10 @@ test suite:
   * LispWorks
   * SBCL
 
-To run tests, load `lparallel-test.asd` and call `(lparallel-test:execute)`.
+To run tests, call `(asdf:test-system :lparallel/test)`.
 
-To run benchmarks, load `lparallel-bench.asd` and call
-`(lparallel-bench:execute N)` where `N` is the number of worker threads.
+To run benchmarks, load `:lparallel/bench` and call
+`(lparallel/bench:execute N)` where `N` is the number of worker threads.
 
 ### Author
 

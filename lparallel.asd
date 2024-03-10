@@ -74,79 +74,106 @@ See http://lparallel.org for documentation and examples.
   :depends-on (:alexandria
                :bordeaux-threads)
   :serial t
-  :components               ((:module "src"
-                              :serial t
-                              :components
-		                   ((:module "util"
-                                     :serial t
-                                     :components
-                                             ((:file "package")
-                                              (:file "config")
-                                              (:file "misc")
-                                              (:file "defmacro")
-                                              (:file "defun")
-                                              (:file "defslots")
-                                              (:file "defpair")))
-                                    (:file "thread-util")
-                                    (:file "raw-queue")
-                                    (:file "cons-queue")
-                                    (:file "vector-queue")
-                                    (:file "queue")
-#-lparallel.with-stealing-scheduler (:file "biased-queue")
-#+lparallel.with-stealing-scheduler (:file "counter")
-#+lparallel.with-stealing-scheduler (:module "spin-queue"
-                                     :serial t
-                                     :components
-                                             ((:file "package")
-#+lparallel.with-cas                          (:file "cas-spin-queue")
-#-lparallel.with-cas                          (:file "default-spin-queue")))
-                                    (:module "kernel"
-                                     :serial t
-                                     :components
-                                             ((:file "package")
-                                              (:file "specials")
-                                              (:file "handling")
-                                              (:file "classes")
-#-lparallel.with-stealing-scheduler           (:file "central-scheduler")
-#+lparallel.with-stealing-scheduler           (:file "stealing-scheduler")
-#-lparallel.without-kill                      (:file "kill")
-                                              (:file "core")
-                                              (:file "timeout")))
-                                    (:file "kernel-util")
-                                    (:file "promise")
-                                    (:file "ptree")
-                                    (:file "slet")
-                                    (:file "defpun")
-                                    (:module "cognate"
-                                     :serial t
-                                     :components
-                                             ((:file "package")
-                                              (:file "util")
-                                              (:file "option")
-                                              (:file "subdivide")
-                                              (:file "pandor")
-                                              (:file "plet")
-                                              (:file "pmap")
-#-abcl                                        (:file "pmap-open-coded")
-                                              (:file "pdotimes")
-                                              (:file "pquantifier")
-                                              (:file "preduce")
-                                              (:file "premove")
-                                              (:file "pfind")
-                                              (:file "pcount")
-                                              (:file "psort")))
-                                    (:file "package")))))
-
-(defmethod perform ((o test-op) (c (eql (find-system :lparallel))))
-  (declare (ignore o c))
-  (load-system '#:lparallel-test)
-  (test-system '#:lparallel-test))
+  :components ((:module "src"
+                :serial t
+                :components
+		((:module "util"
+                  :serial t
+                  :components
+                  ((:file "package")
+                   (:file "config")
+                   (:file "misc")
+                   (:file "defmacro")
+                   (:file "defun")
+                   (:file "defslots")
+                   (:file "defpair")))
+                 (:file "thread-util")
+                 (:file "raw-queue")
+                 (:file "cons-queue")
+                 (:file "vector-queue")
+                 (:file "queue")
+                 (:file "biased-queue" :if-feature (:not :lparallel.with-stealing-scheduler))
+                 (:file "counter" :if-feature :lparallel.with-stealing-scheduler)
+                 (:module "spin-queue"
+                  :serial t
+                  :if-feature :lparallel.with-stealing-scheduler
+                  :components
+                  ((:file "package")
+                   (:file "cas-spin-queue" :if-feature :lparallel.with-cas)
+                   (:file "default-spin-queue" :if-feature (:not :lparallel.with-cas))))
+                 (:module "kernel"
+                  :serial t
+                  :components
+                  ((:file "package")
+                   (:file "specials")
+                   (:file "handling")
+                   (:file "classes")
+                   (:file "central-scheduler" :if-feature (:not :lparallel.with-stealing-scheduler))
+                   (:file "stealing-scheduler" :if-feature :lparallel.with-stealing-scheduler)
+                   (:file "kill" :if-feature (:not :lparallel.without-kill))
+                   (:file "core")
+                   (:file "timeout")))
+                 (:file "kernel-util")
+                 (:file "promise")
+                 (:file "ptree")
+                 (:file "slet")
+                 (:file "defpun")
+                 (:module "cognate"
+                  :serial t
+                  :components
+                  ((:file "package")
+                   (:file "util")
+                   (:file "option")
+                   (:file "subdivide")
+                   (:file "pandor")
+                   (:file "plet")
+                   (:file "pmap")
+                   (:file "pmap-open-coded" :if-feature (:not :abcl))
+                   (:file "pdotimes")
+                   (:file "pquantifier")
+                   (:file "preduce")
+                   (:file "premove")
+                   (:file "pfind")
+                   (:file "pcount")
+                   (:file "psort")))
+                 (:file "package"))))
+  :in-order-to ((test-op (test-op :lparallel/test))))
 
 (defmethod perform :after ((o load-op) (c (eql (find-system :lparallel))))
   (declare (ignore o c))
   (pushnew :lparallel *features*))
 
-;;; svref problem in sbcl-1.1.6
-#+sbcl
-(when (string= "1.1.6" (lisp-implementation-version))
-  (error "Sorry, cannot use lparallel with SBCL 1.1.6; any version but that."))
+(defsystem :lparallel/test
+  :description "Test suite for lparallel."
+  :licence "BSD"
+  :author "James M. Lawrence <llmjjmll@gmail.com>"
+  :depends-on (:lparallel)
+  :serial t
+  :components ((:module "test"
+                :serial t
+                :components ((:file "1am")
+                             (:file "package")
+                             (:file "base")
+                             (:file "thread-util-test")
+                             (:file "queue-test")
+                             (:file "kernel-test")
+                             (:file "cognate-test")
+                             (:file "promise-test")
+                             (:file "defpun-test")
+                             (:file "ptree-test"))))
+  :perform (test-op (o c) (symbol-call :lparallel/test '#:execute)))
+
+(defsystem :lparallel/bench
+  :description "Benchmarks for lparallel."
+  :licence "BSD"
+  :author "James M. Lawrence <llmjjmll@gmail.com>"
+  :depends-on (:lparallel
+               :trivial-garbage
+               #+sbcl (:require :sb-sprof))
+  :serial t
+  :components ((:module "bench"
+                :serial t
+                :components ((:file "package")
+                             (:file "bench")
+                             (:file "suite")
+                             (:file "profile" :if-feature :sbcl)))))
