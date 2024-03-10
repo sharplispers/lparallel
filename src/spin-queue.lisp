@@ -85,9 +85,9 @@
 (defconstant +dummy+ 'dummy)
 (defconstant +dead-end+ 'dead-end)
 
-(defstruct (spin-queue (:constructor %make-spin-queue (head tail)))
-  (head (error "no head") #-ccl :type #-ccl node)
-  (tail (error "no tail") #-ccl :type #-ccl node))
+(atomics:defstruct (spin-queue (:constructor %make-spin-queue (head tail)))
+  (head (error "no head"))
+  (tail (error "no tail")))
 
 (defun make-spin-queue ()
   (let ((dummy (make-node +dummy+ nil)))

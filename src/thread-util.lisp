@@ -33,6 +33,18 @@
    "(private) Thread utilities.")
   (:use #:cl
         #:lparallel.util)
+  (:import-from #:atomics
+                #:cas)
+  (:import-from #:bordeaux-threads-2
+                #:*default-special-bindings*
+                #:make-thread
+                #:make-condition-variable
+                #:current-thread
+                #:destroy-thread
+                #:make-lock
+                #:acquire-lock
+                #:release-lock
+                #:with-lock-held)
   (:export #:with-thread
            #:with-lock-predicate/wait
            #:with-lock-predicate/no-wait
@@ -45,17 +57,7 @@
            #:with-lock-held
            #:condition-wait
            #:destroy-thread
-           #:current-thread)
-  (:import-from #:bordeaux-threads-2
-                #:*default-special-bindings*
-                #:make-thread
-                #:make-condition-variable
-                #:current-thread
-                #:destroy-thread
-                #:make-lock
-                #:acquire-lock
-                #:release-lock
-                #:with-lock-held))
+           #:current-thread))
 
 (in-package #:lparallel.thread-util)
 
@@ -97,19 +99,7 @@
 
 (alias-function condition-notify bt2:condition-notify)
 
-;;;; cas and spin-lock
-
-(defmacro cas (place old new &environment env)
-  (declare (ignorable env))
-  (check-type old symbol)
-  ;; macroexpand is needed for sbcl-1.0.53 and older
-  #+sbcl `(eq ,old (sb-ext:compare-and-swap ,(macroexpand place env)
-                                            ,old ,new))
-  #+ccl `(ccl::conditional-store ,place ,old ,new)
-  #+lispworks `(sys:compare-and-swap ,place ,old ,new))
-
-#-(or sbcl ccl lispworks)
-(error "cas not defined")
+;;;; spin-lock
 
 (defun make-spin-lock ()
   nil)

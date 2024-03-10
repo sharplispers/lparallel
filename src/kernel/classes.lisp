@@ -87,7 +87,7 @@
 ;;; kernel subclasses directly from this."
 #-lparallel.with-debug
 (locally (declare #.*full-optimize*)
-  (defstruct (limiter (:conc-name nil))
+  (atomics:defstruct (limiter (:conc-name nil))
     (limiter-accept-task-p (error "no init") :type boolean)
     (limiter-lock (error "no init"))
     (limiter-count (error "no init") :type fixnum)))

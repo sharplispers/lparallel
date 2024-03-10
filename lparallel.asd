@@ -51,6 +51,7 @@ See http://lparallel.org for documentation and examples.
   :licence "BSD"
   :author "James M. Lawrence <llmjjmll@gmail.com>"
   :depends-on (:alexandria
+               :atomics
                :bordeaux-threads
                :trivial-cltl2)
   :serial t
