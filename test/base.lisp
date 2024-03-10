@@ -74,10 +74,10 @@
 (defun thread-count ()
   ;; ccl can spontaneously lose the initial thread (issue #1042)
   #+ccl (count "Initial"
-               (bordeaux-threads:all-threads)
-               :key #'bordeaux-threads:thread-name
+               (bt2:all-threads)
+               :key #'bt2:thread-name
                :test-not #'string=)
-  #-ccl (length (bordeaux-threads:all-threads)))
+  #-ccl (length (bt2:all-threads)))
 
 (defun call-with-thread-count-check (body-fn)
   (sleep 0.2)

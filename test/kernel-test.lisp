@@ -354,7 +354,7 @@
 
 (defun all-workers-alive-p ()
   (sleep 0.2)
-  (every #'bordeaux-threads:thread-alive-p
+  (every #'bt2:thread-alive-p
          (map 'list
               #'lparallel.kernel::thread
               (lparallel.kernel::workers *kernel*))))
@@ -750,5 +750,5 @@
 (base-test package-test
   (assert-internal-symbols-not-imported
    :own-packages (packages-matching "lparallel")
-   :third-party-packages '(#:alexandria #:bordeaux-threads))
+   :third-party-packages '(#:alexandria #:bordeaux-threads-2))
   (is t))

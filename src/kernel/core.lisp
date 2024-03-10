@@ -218,7 +218,7 @@
 
 `name' is a string identifier for this kernel which is reported by
 `print-object'. Worker threads will also be given this name, shown in
-`bordeaux-threads:all-threads'.
+`bt2:all-threads'.
 
 `bindings' is an alist for establishing thread-local variables inside
 worker threads. By default workers will have *standard-output* and

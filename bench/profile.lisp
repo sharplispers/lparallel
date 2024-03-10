@@ -65,7 +65,7 @@
   (profile-fns #.(home-functions-in-packages-passing
                   (lambda (pkg)
                     (or (match-package-p "lparallel" pkg)
-                        (match-package-p "bordeaux-threads" pkg)
+                        (match-package-p "bordeaux-threads-2" pkg)
                         #+(and sbcl lparallel.with-stealing-scheduler)
                         (match-package-p "sb-concurrency" pkg))))))
 

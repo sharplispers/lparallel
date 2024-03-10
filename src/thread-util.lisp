@@ -48,7 +48,7 @@
            #:current-thread)
   #+lparallel.with-green-threads
   (:export #:thread-yield)
-  (:import-from #:bordeaux-threads
+  (:import-from #:bordeaux-threads-2
                 #:*default-special-bindings*
                 #:make-thread
                 #:make-condition-variable
@@ -59,23 +59,23 @@
                 #:release-lock
                 #:with-lock-held)
   #+lparallel.with-green-threads
-  (:import-from #:bordeaux-threads
+  (:import-from #:bordeaux-threads-2
                 #:thread-yield))
 
 (in-package #:lparallel.thread-util)
 
 ;;;; condition-wait
 
-;;; Check for timeout parameter in bordeaux-threads:condition-wait.
+;;; Check for timeout parameter in bt2:condition-wait.
 (eval-when (:compile-toplevel :execute)
   ;; use special to defeat compiler analysis
-  (defparameter *condition-wait* #'bordeaux-threads:condition-wait)
+  (defparameter *condition-wait* #'bt2:condition-wait)
 
   (flet ((has-condition-wait-timeout-p ()
-           (let* ((lock (bordeaux-threads:make-lock))
-                  (cvar (bordeaux-threads:make-condition-variable))
+           (let* ((lock (bt2:make-lock))
+                  (cvar (bt2:make-condition-variable))
                   (args `(,cvar ,lock :timeout 0.001)))
-             (bordeaux-threads:with-lock-held (lock)
+             (bt2:with-lock-held (lock)
                (ignore-errors
                  (apply *condition-wait* args)
                  t)))))
@@ -93,20 +93,20 @@
     (if timeout
         (error "Timeout option is not available in this version of ~
                 bordeaux-threads.")
-        (bordeaux-threads:condition-wait cvar lock))))
+        (bt2:condition-wait cvar lock))))
 
 #-lparallel.without-bordeaux-threads-condition-wait-timeout
-(alias-function condition-wait bordeaux-threads:condition-wait)
+(alias-function condition-wait bt2:condition-wait)
 
 ;;;; condition-notify
 
 #+lparallel.with-green-threads
 (defun condition-notify (cvar)
-  (bordeaux-threads:condition-notify cvar)
+  (bt2:condition-notify cvar)
   (thread-yield))
 
 #-lparallel.with-green-threads
-(alias-function condition-notify bordeaux-threads:condition-notify)
+(alias-function condition-notify bt2:condition-notify)
 
 ;;;; cas and spin-lock
 
@@ -168,7 +168,7 @@
   (with-gensyms (lock-var)
     `(when ,predicate
        (let ((,lock-var ,lock))
-         (when (acquire-lock ,lock-var nil)
+         (when (acquire-lock ,lock-var :wait nil)
            (unwind-protect
                 (when ,predicate
                   ,@body)
