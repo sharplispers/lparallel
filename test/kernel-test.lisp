@@ -127,7 +127,6 @@
       (is (null a))
       (is (null b)))))
 
-#-lparallel.without-bordeaux-threads-condition-wait-timeout
 (full-test try-receive-timeout-test
   (let ((channel (make-channel)))
     (multiple-value-bind (a b) (try-receive-result channel :timeout 0.1)

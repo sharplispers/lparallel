@@ -39,6 +39,8 @@
                 #:*default-special-bindings*
                 #:make-thread
                 #:make-condition-variable
+                #:condition-wait
+                #:condition-notify
                 #:current-thread
                 #:destroy-thread
                 #:make-lock
@@ -60,44 +62,6 @@
            #:current-thread))
 
 (in-package #:lparallel.thread-util)
-
-;;;; condition-wait
-
-;;; Check for timeout parameter in bt2:condition-wait.
-(eval-when (:compile-toplevel :execute)
-  ;; use special to defeat compiler analysis
-  (defparameter *condition-wait* #'bt2:condition-wait)
-
-  (flet ((has-condition-wait-timeout-p ()
-           (let* ((lock (bt2:make-lock))
-                  (cvar (bt2:make-condition-variable))
-                  (args `(,cvar ,lock :timeout 0.001)))
-             (bt2:with-lock-held (lock)
-               (ignore-errors
-                 (apply *condition-wait* args)
-                 t)))))
-    (unless (has-condition-wait-timeout-p)
-      (pushnew :lparallel.without-bordeaux-threads-condition-wait-timeout
-               *features*))))
-
-#+lparallel.without-bordeaux-threads-condition-wait-timeout
-(progn
-  (eval-when (:load-toplevel)
-    (pushnew :lparallel.without-bordeaux-threads-condition-wait-timeout
-             *features*))
-
-  (defun condition-wait (cvar lock &key timeout)
-    (if timeout
-        (error "Timeout option is not available in this version of ~
-                bordeaux-threads.")
-        (bt2:condition-wait cvar lock))))
-
-#-lparallel.without-bordeaux-threads-condition-wait-timeout
-(alias-function condition-wait bt2:condition-wait)
-
-;;;; condition-notify
-
-(alias-function condition-notify bt2:condition-notify)
 
 ;;;; spin-lock
 
