@@ -448,13 +448,17 @@ deadlocked or infinite looping tasks."
       (when (alivep kernel)
         (let ((channel (let ((*kernel* kernel)) (make-channel)))
               (threads (map 'list #'thread (workers kernel))))
-          (cond (wait
-                 (shutdown channel kernel)
-                 threads)
-                (t
-                 (cons (with-thread (:name "lparallel kernel shutdown manager")
-                         (shutdown channel kernel))
-                       threads))))))))
+          (flet ((shutdown-kernel-and-threads ()
+                   (shutdown channel kernel)
+                   (alexandria:ignore-some-conditions (bt2:abnormal-exit)
+                     (map nil #'bt2:join-thread threads))))
+            (cond (wait
+                   (shutdown-kernel-and-threads)
+                   threads)
+                  (t
+                   (cons (with-thread (:name "lparallel kernel shutdown manager")
+                           (shutdown-kernel-and-threads))
+                         threads)))))))))
 
 (defun task-categories-running ()
   "Return a vector containing the task category currently running for
