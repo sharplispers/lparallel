@@ -37,8 +37,14 @@
         #:lparallel.util
         #:lparallel.thread-util
         #:lparallel.queue
-        #:lparallel.counter
         #:lparallel.spin-queue)
+  (:import-from #:alexandria
+                #:simple-style-warning)
+  (:import-from #:bordeaux-threads-2
+                #:make-atomic-integer
+                #:atomic-integer-decf
+                #:atomic-integer-incf
+                #:atomic-integer-value)
   (:export #:make-kernel
            #:check-kernel
            #:end-kernel
@@ -69,8 +75,6 @@
            #:transfer-error
            #:no-kernel-error
            #:kernel-creation-error
-           #:task-killed-error)
-  (:import-from #:alexandria
-                #:simple-style-warning))
+           #:task-killed-error))
 
 (in-package #:lparallel.kernel)

@@ -97,7 +97,7 @@
 (defun/type maybe-wake-a-worker (scheduler) (scheduler) (values)
   (declare #.*full-optimize*)
   (with-scheduler-slots (wait-lock wait-cvar wait-count notify-count) scheduler
-    (with-lock-predicate/wait wait-lock (plusp (counter-value wait-count))
+    (with-lock-predicate/wait wait-lock (plusp (atomic-integer-value wait-count))
       (incf notify-count)
       (condition-notify wait-cvar)))
   (values))
@@ -142,14 +142,14 @@
              (with-scheduler-slots (wait-cvar wait-lock wait-count
                                     notify-count low-priority-tasks) scheduler
                (unwind-protect/ext
-                :prepare (inc-counter wait-count)
+                :prepare (atomic-integer-incf wait-count)
                 :main    (with-lock-held (wait-lock)
                            (try-pop (tasks worker))
                            (try-pop low-priority-tasks)
                            (loop until (plusp notify-count)
                                  do (condition-wait wait-cvar wait-lock)
                                  finally (decf notify-count)))
-                :cleanup (dec-counter wait-count)))
+                :cleanup (atomic-integer-decf wait-count)))
              (values)))
     (declare (dynamic-extent #'try-pop #'try-pop-all #'maybe-sleep))
     (with-scheduler-slots (spin-count) scheduler

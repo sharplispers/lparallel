@@ -73,7 +73,6 @@ See http://lparallel.org for documentation and examples.
                  (:file "cons-queue")
                  (:file "vector-queue")
                  (:file "queue")
-                 (:file "counter")
                  (:file "spin-queue")
                  (:module "kernel"
                   :serial t

@@ -61,7 +61,7 @@
   ((workers                                        :type simple-vector)
    (wait-cvar          :initform (make-condition-variable))
    (wait-lock          :initform (make-lock))
-   (wait-count         :initform (make-counter)    :type counter)
+   (wait-count         :initform (make-atomic-integer))
    (notify-count       :initform 0                 :type (integer 0))
    (spin-count                                     :type index)
    (random-index       :initform 0                 :type index)
