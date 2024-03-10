@@ -38,6 +38,13 @@
         #:lparallel.promise
         #:lparallel.defpun
         #:lparallel.slet)
+  (:import-from #:alexandria
+                #:remove-from-plist
+                #:simple-style-warning)
+  (:import-from #:lparallel.slet
+                #:parse-bindings)
+  (:import-from #:trivial-cltl2
+                #:declaration-information)
   (:export #:pand
            #:pcount
            #:pcount-if
@@ -71,11 +78,6 @@
            #:psome
            #:psort
            #:psort*
-           #:slet)
-  (:import-from #:alexandria
-                #:remove-from-plist
-                #:simple-style-warning)
-  (:import-from #:lparallel.slet
-                #:parse-bindings))
+           #:slet))
 
 (in-package #:lparallel.cognate)

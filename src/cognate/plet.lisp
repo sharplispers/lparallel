@@ -39,40 +39,8 @@
 
 ;;;; declarationp
 
-;;; `declaration-information' resolves the ambiguity between types and
-;;; custom declares -- (declare (type foo x)) may be abbreviated as
-;;; (declare (foo x)).
-#+lparallel.with-cltl2
-(progn
-  #-(or sbcl ccl lispworks allegro)
-  (eval-when (:compile-toplevel :load-toplevel :execute)
-    (error "cltl2 not (yet?) enabled for this implementation."))
-
-  (defun declaration-information (decl env)
-    (#+sbcl sb-cltl2:declaration-information
-     #+ccl ccl:declaration-information
-     #+lispworks hcl:declaration-information
-     #+allegro sys:declaration-information
-     decl env))
-
-  (defun custom-declaration-p (symbol env)
-    (member symbol (declaration-information 'declaration env))))
-
-;;; When `declaration-information' is not available use `subtypep'
-;;; instead. On implementations that have a weak `subtypep', a deftype
-;;; that expands to a compound type might not be recognized as a type.
-;;; There's no way to solve this portably. The user can avoid this
-;;; problem by using the literal `type' declaration instead of
-;;; omitting `type' as shortcut.
-#-lparallel.with-cltl2
-(progn
-  (defun known-type-p (symbol)
-    (ignore-errors (nth-value 1 (subtypep symbol nil))))
-
-  (defun custom-declaration-p (form env)
-    (declare (ignore env))
-    (typecase form
-      (symbol (not (known-type-p form))))))
+(defun custom-declaration-p (symbol env)
+  (member symbol (declaration-information 'declaration env)))
 
 (defparameter *standard-declaration-identifiers*
   '(dynamic-extent  ignore     optimize

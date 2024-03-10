@@ -29,12 +29,6 @@
 ;;; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  ;; plet uses a cltl2 feature
-  #+(or sbcl ccl lispworks allegro)
-  (progn
-    (pushnew :lparallel.with-cltl2 *features*)
-    #+sbcl (require :sb-cltl2))
-
   ;; thread kill does not call unwind-protect cleanup forms
   #+abcl
   (pushnew :lparallel.without-kill *features*))
@@ -62,7 +56,8 @@ See http://lparallel.org for documentation and examples.
   :licence "BSD"
   :author "James M. Lawrence <llmjjmll@gmail.com>"
   :depends-on (:alexandria
-               :bordeaux-threads)
+               :bordeaux-threads
+               :trivial-cltl2)
   :serial t
   :components ((:module "src"
                 :serial t
