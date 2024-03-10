@@ -46,8 +46,6 @@
            #:condition-wait
            #:destroy-thread
            #:current-thread)
-  #+lparallel.with-green-threads
-  (:export #:thread-yield)
   (:import-from #:bordeaux-threads-2
                 #:*default-special-bindings*
                 #:make-thread
@@ -57,10 +55,7 @@
                 #:make-lock
                 #:acquire-lock
                 #:release-lock
-                #:with-lock-held)
-  #+lparallel.with-green-threads
-  (:import-from #:bordeaux-threads-2
-                #:thread-yield))
+                #:with-lock-held))
 
 (in-package #:lparallel.thread-util)
 
@@ -100,12 +95,6 @@
 
 ;;;; condition-notify
 
-#+lparallel.with-green-threads
-(defun condition-notify (cvar)
-  (bt2:condition-notify cvar)
-  (thread-yield))
-
-#-lparallel.with-green-threads
 (alias-function condition-notify bt2:condition-notify)
 
 ;;;; cas and spin-lock

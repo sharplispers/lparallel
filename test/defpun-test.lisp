@@ -56,8 +56,7 @@
         (+ a b))))
 
 (full-test defpun-fib-test
-  (loop for n from 1 to #+lparallel.with-green-threads 5
-                        #-lparallel.with-green-threads 15
+  (loop for n from 1 to 15
         do (is (= (fib-let n) (fib-plet n) (fib-plet-if n)))))
 
 ;;; typed
@@ -84,8 +83,7 @@
         (+ a b))))
 
 (full-test defpun/type-fib-test
-  (loop for n from 1 to #+lparallel.with-green-threads 5
-                        #-lparallel.with-green-threads 15
+  (loop for n from 1 to 15
         do (is (= (fib-let/type n) (fib-plet/type n) (fib-plet-if/type n)))))
 
 ;;; redefinitions
@@ -225,6 +223,5 @@
 (full-test defpun-priority-test
   (let ((*task-priority* :low))
     (repeat 10
-      (let ((n #+lparallel.with-green-threads 5
-               #-lparallel.with-green-threads 25))
+      (let ((n 25))
         (is (= (fib-let n) (fib-plet n)))))))

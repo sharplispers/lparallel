@@ -452,8 +452,7 @@
 (full-test psort-test
   ;; abcl workarounds for worse-case sort bug
   (dolist (granularity '(nil 1 5 100))
-    (dolist (size #-lparallel.with-green-threads '(1 5 10 100 10000)
-                  #+lparallel.with-green-threads '(1 5 10))
+    (dolist (size '(1 5 10 100 10000))
       (let ((source (make-random-vector size)))
         (let ((a (copy-seq source))
               (b (copy-seq source)))

@@ -242,8 +242,7 @@
        (loop with worker = *worker*
              while (or ,@(loop for temp-var in temp-vars
                                collect `(eq ,temp-var +no-result+)))
-             do #+lparallel.with-green-threads (thread-yield)
-                (steal-work (the kernel ,kernel) worker)))))
+             do (steal-work (the kernel ,kernel) worker)))))
 
 (defmacro scan-for-errors (binding-data)
   ;; a wrapped error would only appear as the primary return value

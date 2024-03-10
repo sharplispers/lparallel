@@ -45,10 +45,6 @@
     (pushnew :lparallel.with-cltl2 *features*)
     #+sbcl (require :sb-cltl2))
 
-  ;; green threads need calls to yield
-  #+(and allegro (not os-threads))
-  (pushnew :lparallel.with-green-threads *features*)
-
   ;; thread kill does not call unwind-protect cleanup forms
   #+abcl
   (pushnew :lparallel.without-kill *features*))

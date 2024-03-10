@@ -186,7 +186,6 @@
     :pop-queue   pop-queue
     :queue-count queue-count)
 
-#-lparallel.with-green-threads
 (define-grind-queue grind-queue-no-timeout-test
     :make-queue  make-queue
     :push-queue  push-queue
@@ -206,7 +205,6 @@
     :pop-queue   pop-queue
     :queue-count queue-count)
 
-#-lparallel.with-green-threads
 (define-grind-queue grind-fixed-capacity-queue-no-timeout-test
     :make-queue  make-fixed-capacity-queue
     :push-queue  push-queue
