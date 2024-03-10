@@ -22,7 +22,6 @@ lparallel should run on any Common Lisp implementation supported by
 bordeaux-threads. The following implementations successfully pass the
 test suite:
 
-  * ABCL
   * Allegro
   * Clozure
   * LispWorks

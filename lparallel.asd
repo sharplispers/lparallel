@@ -28,11 +28,6 @@
 ;;; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ;;; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  ;; thread kill does not call unwind-protect cleanup forms
-  #+abcl
-  (pushnew :lparallel.without-kill *features*))
-
 (defsystem :lparallel
   :version "2.8.4"
   :description "Parallelism for Common Lisp"
@@ -87,7 +82,7 @@ See http://lparallel.org for documentation and examples.
                    (:file "handling")
                    (:file "classes")
                    (:file "stealing-scheduler")
-                   (:file "kill" :if-feature (:not :lparallel.without-kill))
+                   (:file "kill")
                    (:file "core")
                    (:file "timeout")))
                  (:file "kernel-util")
@@ -105,7 +100,7 @@ See http://lparallel.org for documentation and examples.
                    (:file "pandor")
                    (:file "plet")
                    (:file "pmap")
-                   (:file "pmap-open-coded" :if-feature (:not :abcl))
+                   (:file "pmap-open-coded")
                    (:file "pdotimes")
                    (:file "pquantifier")
                    (:file "preduce")

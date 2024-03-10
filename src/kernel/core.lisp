@@ -105,10 +105,7 @@
 
 (defun/type worker-loop (kernel worker) (kernel worker) t
   ;; All implementations tested so far execute unwind-protect clauses
-  ;; when the ABORT restart is invoked (TERMINATE-THREAD in SBCL),
-  ;; including ABCL.
-  ;;
-  ;; All but ABCL execute unwind-protect for destroy-thread.
+  ;; when the ABORT restart is invoked (TERMINATE-THREAD in SBCL).
   ;;
   ;; This function is inside `call-with-task-handler' (or
   ;; equivalent). Jumping out means a thread abort.
@@ -121,10 +118,6 @@
                           (return))))
        :abort (unless *lisp-exiting-p*
                 (replace-worker kernel worker)))))
-
-#+lparallel.without-kill
-(defmacro with-worker-restarts (&body body)
-  `(progn ,@body))
 
 (defun call-with-worker-context (fn worker-context kernel worker)
   (handshake/from-worker/start worker)

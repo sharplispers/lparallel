@@ -66,7 +66,6 @@
   (sleep 0.2)
   (is (eq :main *memo*)))
 
-#-lparallel.without-kill
 (base-test destroy-thread-cleanup-test
   (let* ((cleanedp nil)
          (thread (with-thread ()

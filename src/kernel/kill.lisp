@@ -91,9 +91,7 @@ If `dry-run' is nil, the function returns the number of tasks killed.
 
 If `dry-run' is non-nil then no tasks are killed. In this case the
 return value is the number of tasks that would have been killed if
-`dry-run' were nil.
-
-`kill-tasks' is not available in ABCL."
+`dry-run' were nil."
   (let ((kernel *kernel*))
     (when kernel
       (unless task-category

@@ -270,7 +270,6 @@
         area)
       (is (= 3 width)))))
 
-#-lparallel.without-kill
 (base-test ptree-kill-test
   (let ((memo (make-queue))
         (tree (make-ptree)))
@@ -292,7 +291,6 @@
       (signals task-killed-error
         (call-ptree 'inf tree)))))
 
-#-lparallel.without-kill
 (base-test second-ptree-kill-test
   (let ((memo (make-queue))
         (tree (make-ptree)))
@@ -317,7 +315,6 @@
         (call-ptree 'height tree))
       (is (= 9 (call-ptree 'width tree))))))
 
-#-lparallel.without-kill
 (base-test third-ptree-kill-test
   (let ((memo (make-queue))
         (tree (make-ptree)))

@@ -67,7 +67,6 @@
     (repeat 1000
       (is (null (receive-result channel))))))
 
-#-lparallel.without-kill
 (base-test kill-during-end-kernel-test
   (let* ((*kernel* (make-kernel 2))
          (kernel *kernel*)
@@ -374,7 +373,6 @@
             (receive-result channel))))
       (is (all-workers-alive-p)))))
 
-#-lparallel.without-kill
 (base-test sleeping-worker-replacement-test
   (with-thread-count-check
     (with-temp-kernel (2 :bindings (list (cons '*error-output*
@@ -405,7 +403,6 @@
         (receive-result channel)))
     (is (eq :called result))))
 
-#-lparallel.without-kill
 (base-test custom-kill-task-test
   (with-thread-count-check
     (with-temp-kernel (2)
@@ -431,7 +428,6 @@
           (is (= 2 (length errors)))
           (is (equal '(survived) regulars)))))))
 
-#-lparallel.without-kill
 (base-test default-kill-task-test
   (with-thread-count-check
     (with-temp-kernel (2)
@@ -465,7 +461,6 @@
       (is (eql 3 (receive-result channel)))
       (is (eq 'timeout (receive-result channel))))))
 
-#-lparallel.without-kill
 (base-test cancel-timeout-test
   (with-temp-kernel (2)
     (locally (declare (notinline submit-timeout cancel-timeout))
@@ -475,7 +470,6 @@
         (cancel-timeout timeout 'a)
         (is (eq 'a (receive-result channel)))))))
 
-#-lparallel.without-kill
 (base-test kill-timeout-test
   (with-temp-kernel (2)
     (locally (declare (notinline submit-timeout))
@@ -579,7 +573,6 @@
            (is (= 3 (receive-result channel)))))
     (end-kernel)))
 
-#-lparallel.without-kill
 (base-test reject-kill-nil-test
   (with-temp-kernel (2)
     (let ((channel (make-channel)))
@@ -591,7 +584,6 @@
         (kill-tasks nil))
       (= 1 (kill-tasks :default)))))
 
-#-lparallel.without-kill
 (full-test worker-suicide-test
   (let ((channel (make-channel)))
     (submit-task channel (lambda ()
