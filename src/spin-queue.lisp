@@ -64,21 +64,10 @@
 
 ;;;; node
 
-#+(or sbcl lispworks)
-(progn
-  (deftype node () 'cons)
-  (alias-function make-node cons)
-  (defmacro node-car (node) `(car ,node))
-  (defmacro node-cdr (node) `(cdr ,node)))
-
-;;; CCL cannot compare-and-swap on a cons. Slots for defstruct must be
-;;; untyped for ccl::conditional-store.
-#+ccl
-(progn
-  (declaim (inline make-node))
-  (defstruct (node (:constructor make-node (car cdr)))
-    (car (error "no car"))
-    (cdr (error "no cdr"))))
+(declaim (inline make-node))
+(defstruct (node (:constructor make-node (car cdr)))
+  (car (error "no car"))
+  (cdr (error "no cdr")))
 
 ;;;; spin-queue
 
