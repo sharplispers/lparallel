@@ -60,22 +60,10 @@
 
 (deftype queue () '(or cons-queue vector-queue))
 
-(defun %make-queue (&key fixed-capacity initial-contents)
+(defun make-queue (&key fixed-capacity initial-contents)
   (if fixed-capacity
       (make-vector-queue fixed-capacity :initial-contents initial-contents)
       (make-cons-queue :initial-contents initial-contents)))
-
-(defun make-queue (&rest args)
-  (apply #'%make-queue (if (= 1 (length args))
-                           nil
-                           args)))
-
-(define-compiler-macro make-queue (&whole whole &rest args)
-  (when (= 1 (length args))
-    (simple-style-warning
-     "Calling `make-queue' with one argument is deprecated.~%~
-      Pass no arguments instead."))
-  whole)
 
 (defun call-with-locked-cons-queue (fn queue)
   (with-locked-cons-queue queue
