@@ -29,10 +29,6 @@
 ;;; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  ;; unless otherwise requested, default to stealing scheduler on sbcl
-  #+(and sbcl (not lparallel.without-stealing-scheduler))
-  (pushnew :lparallel.with-stealing-scheduler *features*)
-
   ;; unless otherwise requested, use compare-and-swap optimizations
   #+(and (or sbcl ccl lispworks)
          (not lparallel.without-cas)
@@ -92,11 +88,9 @@ See http://lparallel.org for documentation and examples.
                  (:file "cons-queue")
                  (:file "vector-queue")
                  (:file "queue")
-                 (:file "biased-queue" :if-feature (:not :lparallel.with-stealing-scheduler))
-                 (:file "counter" :if-feature :lparallel.with-stealing-scheduler)
+                 (:file "counter")
                  (:module "spin-queue"
                   :serial t
-                  :if-feature :lparallel.with-stealing-scheduler
                   :components
                   ((:file "package")
                    (:file "cas-spin-queue" :if-feature :lparallel.with-cas)
@@ -108,8 +102,7 @@ See http://lparallel.org for documentation and examples.
                    (:file "specials")
                    (:file "handling")
                    (:file "classes")
-                   (:file "central-scheduler" :if-feature (:not :lparallel.with-stealing-scheduler))
-                   (:file "stealing-scheduler" :if-feature :lparallel.with-stealing-scheduler)
+                   (:file "stealing-scheduler")
                    (:file "kill" :if-feature (:not :lparallel.without-kill))
                    (:file "core")
                    (:file "timeout")))

@@ -100,7 +100,6 @@
   :queue-count   queue-count
   :peek-queue    peek-queue)
 
-#+lparallel.with-stealing-scheduler
 (define-queue-test spin-queue-test
   :make-queue    lparallel.spin-queue:make-spin-queue
   :push-queue    lparallel.spin-queue:push-spin-queue
@@ -118,26 +117,6 @@
   :queue-empty-p queue-empty-p
   :queue-count   queue-count
   :peek-queue    peek-queue)
-
-#-lparallel.with-stealing-scheduler
-(define-queue-test biased-queue-test
-  :make-queue    lparallel.biased-queue:make-biased-queue
-  :push-queue    lparallel.biased-queue:push-biased-queue
-  :pop-queue     lparallel.biased-queue:pop-biased-queue
-  :try-pop-queue lparallel.biased-queue:try-pop-biased-queue
-  :queue-empty-p lparallel.biased-queue:biased-queue-empty-p
-  :queue-count   lparallel.biased-queue:biased-queue-count
-  :peek-queue    lparallel.biased-queue:peek-biased-queue)
-
-#-lparallel.with-stealing-scheduler
-(define-queue-test biased-queue-low-test
-  :make-queue    lparallel.biased-queue:make-biased-queue
-  :push-queue    lparallel.biased-queue:push-biased-queue/low
-  :pop-queue     lparallel.biased-queue:pop-biased-queue
-  :try-pop-queue lparallel.biased-queue:try-pop-biased-queue
-  :queue-empty-p lparallel.biased-queue:biased-queue-empty-p
-  :queue-count   lparallel.biased-queue:biased-queue-count
-  :peek-queue    lparallel.biased-queue:peek-biased-queue)
 
 (defmacro define-grind-queue (name
                               &key make-queue push-queue pop-queue queue-count)
@@ -218,33 +197,17 @@
     :pop-queue   try-pop-queue/wait/timeout
     :queue-count queue-count)
 
-#+lparallel.with-stealing-scheduler
 (defun pop-spin-queue/wait (queue)
   (loop (multiple-value-bind
               (item presentp) (lparallel.spin-queue:pop-spin-queue queue)
           (when presentp
             (return item)))))
 
-#+lparallel.with-stealing-scheduler
 (define-grind-queue grind-spin-queue-test
     :make-queue  lparallel.spin-queue:make-spin-queue
     :push-queue  lparallel.spin-queue:push-spin-queue
     :pop-queue   pop-spin-queue/wait
     :queue-count lparallel.spin-queue:spin-queue-count)
-
-#-lparallel.with-stealing-scheduler
-(define-grind-queue grind-biased-queue-test
-    :make-queue  lparallel.biased-queue:make-biased-queue
-    :push-queue  lparallel.biased-queue:push-biased-queue
-    :pop-queue   lparallel.biased-queue:pop-biased-queue
-    :queue-count lparallel.biased-queue:biased-queue-count)
-
-#-lparallel.with-stealing-scheduler
-(define-grind-queue grind-biased-queue-low-test
-    :make-queue  lparallel.biased-queue:make-biased-queue
-    :push-queue  lparallel.biased-queue:push-biased-queue/low
-    :pop-queue   lparallel.biased-queue:pop-biased-queue
-    :queue-count lparallel.biased-queue:biased-queue-count)
 
 (base-test filled-queue-test
   (loop for n from 1 to 3

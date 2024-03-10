@@ -37,9 +37,8 @@
         #:lparallel.util
         #:lparallel.thread-util
         #:lparallel.queue
-        #-lparallel.with-stealing-scheduler #:lparallel.biased-queue
-        #+lparallel.with-stealing-scheduler #:lparallel.counter
-        #+lparallel.with-stealing-scheduler #:lparallel.spin-queue)
+        #:lparallel.counter
+        #:lparallel.spin-queue)
   (:export #:make-kernel
            #:check-kernel
            #:end-kernel

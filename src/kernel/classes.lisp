@@ -50,16 +50,13 @@
   ((thread            :reader thread)
    (running-category  :reader running-category :initform nil)
    (index             :reader worker-index     :type index)
-   #+lparallel.with-stealing-scheduler
    (tasks             :reader tasks            :type spin-queue))
   (:documentation
    "A worker represents a thread dedicated to executing tasks. See
    `kill-tasks' for an explanation of `running-category'. `index' is
-   the location of the worker in the kernel's vector of workers. When
-   the stealing scheduler is enabled, each worker has its own lockless
-   task queue."))
+   the location of the worker in the kernel's vector of workers.
+   Each worker has its own lockless task queue."))
 
-#+lparallel.with-stealing-scheduler
 (defslots scheduler ()
   ((workers                                        :type simple-vector)
    (wait-cvar          :initform (make-condition-variable))
@@ -83,13 +80,6 @@
    `random-index' -- some random index to the vector of workers.
 
    `low-priority-tasks' -- tasks submitted when `*task-priority*' is `:low'."))
-
-#-lparallel.with-stealing-scheduler
-(progn
-  ;;; The central queue scheduler. All tasks are submitted to a single
-  ;;; queue and all workers pull from the same.
-  (deftype scheduler () 'biased-queue)
-  (defun tasks (scheduler) (declare (ignore scheduler))))
 
 ;;; The limiter, if in use, places a limit on the number of queued
 ;;; tasks. This must be a struct for CAS. The `limiter-accept-task-p'

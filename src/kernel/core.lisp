@@ -153,14 +153,8 @@
 (defun make-all-bindings (kernel bindings)
   (append bindings (list (cons '*kernel* kernel))))
 
-#+lparallel.with-stealing-scheduler
 (defun %make-worker (index tasks)
   (make-worker-instance :thread nil :index index :tasks tasks))
-
-#-lparallel.with-stealing-scheduler
-(defun %make-worker (index tasks)
-  (declare (ignore tasks))
-  (make-worker-instance :thread nil :index index))
 
 (defun make-worker-thread (kernel worker name bindings)
   (with-thread (:name name :bindings bindings)
@@ -188,10 +182,7 @@
 (defun %fill-workers (workers kernel)
   (dotimes (index (length workers))
     (setf (aref workers index)
-          (make-worker kernel
-                       index
-                       #+lparallel.with-stealing-scheduler (make-spin-queue)
-                       #-lparallel.with-stealing-scheduler nil))))
+          (make-worker kernel index (make-spin-queue)))))
 
 (defun fill-workers (workers kernel)
   ;; Start/finish calls are separated for parallel initialization.
@@ -475,7 +466,6 @@ each worker."
                    :worker-count (%kernel-worker-count kernel)
                    :use-caller use-caller-p
                    :alive alivep)
-             #+lparallel.with-stealing-scheduler
              (with-scheduler-slots (spin-count) (scheduler kernel)
                (list :spin-count spin-count))))))
 

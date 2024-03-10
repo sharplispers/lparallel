@@ -66,8 +66,7 @@
                   (lambda (pkg)
                     (or (match-package-p "lparallel" pkg)
                         (match-package-p "bordeaux-threads-2" pkg)
-                        #+(and sbcl lparallel.with-stealing-scheduler)
-                        (match-package-p "sb-concurrency" pkg))))))
+                        #+sbcl (match-package-p "sb-concurrency" pkg))))))
 
 (defun profile (&rest args)
   (without-warnings

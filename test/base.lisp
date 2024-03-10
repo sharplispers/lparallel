@@ -47,7 +47,6 @@
     (when (search "defpun" (symbol-name name) :test #'equalp)
       (with-temp-kernel (n :spin-count (random 5000) :use-caller t)
         (funcall body-fn)))
-    #+lparallel.with-stealing-scheduler
     (with-temp-kernel (n :spin-count (random 5000))
       (funcall body-fn))))
 
