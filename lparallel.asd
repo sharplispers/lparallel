@@ -29,12 +29,6 @@
 ;;; OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  ;; unless otherwise requested, use compare-and-swap optimizations
-  #+(and (or sbcl ccl lispworks)
-         (not lparallel.without-cas)
-         (not lparallel.with-debug))
-  (pushnew :lparallel.with-cas *features*)
-
   ;; plet uses a cltl2 feature
   #+(or sbcl ccl lispworks allegro)
   (progn
@@ -89,12 +83,7 @@ See http://lparallel.org for documentation and examples.
                  (:file "vector-queue")
                  (:file "queue")
                  (:file "counter")
-                 (:module "spin-queue"
-                  :serial t
-                  :components
-                  ((:file "package")
-                   (:file "cas-spin-queue" :if-feature :lparallel.with-cas)
-                   (:file "default-spin-queue" :if-feature (:not :lparallel.with-cas))))
+                 (:file "spin-queue")
                  (:module "kernel"
                   :serial t
                   :components

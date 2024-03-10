@@ -99,38 +99,27 @@
 
 ;;;; cas and spin-lock
 
-#+lparallel.with-cas
-(progn
-  (defmacro cas (place old new &environment env)
-    (declare (ignorable env))
-    (check-type old symbol)
-    ;; macroexpand is needed for sbcl-1.0.53 and older
-    #+sbcl `(eq ,old (sb-ext:compare-and-swap ,(macroexpand place env)
-                                              ,old ,new))
-    #+ccl `(ccl::conditional-store ,place ,old ,new)
-    #+lispworks `(sys:compare-and-swap ,place ,old ,new))
+(defmacro cas (place old new &environment env)
+  (declare (ignorable env))
+  (check-type old symbol)
+  ;; macroexpand is needed for sbcl-1.0.53 and older
+  #+sbcl `(eq ,old (sb-ext:compare-and-swap ,(macroexpand place env)
+                                            ,old ,new))
+  #+ccl `(ccl::conditional-store ,place ,old ,new)
+  #+lispworks `(sys:compare-and-swap ,place ,old ,new))
 
-  #-(or sbcl ccl lispworks)
-  (error "cas not defined")
+#-(or sbcl ccl lispworks)
+(error "cas not defined")
 
-  (defun make-spin-lock ()
-    nil)
+(defun make-spin-lock ()
+  nil)
 
-  (defmacro/once with-spin-lock-held (((access &once container)) &body body)
-    `(locally (declare #.*full-optimize*)
-       (unwind-protect/ext
-        :prepare (loop until (cas (,access ,container) nil t))
-        :main (progn ,@body)
-        :cleanup (setf (,access ,container) nil)))))
-
-#-lparallel.with-cas
-(progn
-  (defun make-spin-lock ()
-    (make-lock))
-
-  (defmacro with-spin-lock-held (((access container)) &body body)
-    `(with-lock-held ((,access ,container))
-       ,@body)))
+(defmacro/once with-spin-lock-held (((access &once container)) &body body)
+  `(locally (declare #.*full-optimize*)
+     (unwind-protect/ext
+      :prepare (loop until (cas (,access ,container) nil t))
+      :main (progn ,@body)
+      :cleanup (setf (,access ,container) nil))))
 
 ;;;; general-purpose utilities
 

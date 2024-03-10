@@ -46,6 +46,20 @@
 ;;; The CDR of a discarded node is set to +DEAD-END+. This flag must
 ;;; be checked at each traversal.
 
+(defpackage #:lparallel.spin-queue
+  (:documentation
+   "(private) Thread-safe FIFO queue which spins instead of locks.")
+  (:use #:cl
+        #:lparallel.util
+        #:lparallel.thread-util)
+  (:export #:spin-queue
+           #:make-spin-queue
+           #:push-spin-queue
+           #:pop-spin-queue
+           #:peek-spin-queue
+           #:spin-queue-count
+           #:spin-queue-empty-p))
+
 (in-package #:lparallel.spin-queue)
 
 ;;;; node
