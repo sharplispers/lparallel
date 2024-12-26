@@ -1,0 +1,447 @@
+
+lparallel Changes
+=================
+= 2.8.4
+
+* fix compilation error in lparallel-test with recent sbcl
+
+= 2.8.3
+
+* handle new sbcl behavior for constant empty arrays in pmap's
+  open coding
+
+= 2.8.2
+
+* loop keywords no longer interned into cl-user
+
+= 2.8.1
+
+* miscellaneous housekeeping
+* for ECL, version 16.0.0 or later is now required
+* fixed a couple tests that failed for ECL or when the compiler's
+  signaling behavior is different (i.e. when the global optimization
+  setting is high)
+
+= 2.8.0
+
+* added broadcast-task -- executes a given task inside each worker
+* added kernel-worker-index -- determine if the current thread is a
+  worker thread, and if so, obtain its assigned index
+
+= 2.7.4
+
+* more syntax checking for task-handler-bind
+* minor housekeeping
+
+= 2.7.3
+
+* when the stealing scheduler is enabled (default on SBCL), fixed
+  compiling on non-x86oid SBCL (by Stas Boukarev)
+
+= 2.7.2
+
+* deprecated `submit-timeout' and `cancel-timeout'; use the new
+  `:timeout' option in `try-receive-result' which is enabled with the
+  latest bordeaux-threads.
+* removed eos dependency in lparallel-test
+
+= 2.7.1
+
+* when the stealing scheduler is enabled (default on SBCL only), fix
+  stealing when *task-priority* is :low -- affected defpun and some
+  cognates when called from inside a worker thread
+
+= 2.7.0
+
+* added the ability to bind multiple values in `plet', e.g.
+    (plet ((x 1) ((y z) (values 2 3))) (+ x y z)) ;=> 6
+* added `slet' -- serial/non-parallel `let' with the same syntax as
+  `plet' for binding multiple values
+* various optimizations
+
+= 2.6.2
+
+* updated to the new bordeaux-threads timeout API -- fixes a hole in
+  the new queue timeout feature
+* fixed a corner case in pmap-into (when no input sequences are passed
+  and the result sequence has a fill pointer that is not at the end)
+
+= 2.6.1
+
+* fixed multiple return values being discarded for functions defined
+  by defpun (this is a recent regression only present in 2.6.0)
+
+= 2.6.0
+
+* added :timeout option to try-pop-queue and try-receive-result; this
+  requires the latest version of bordeaux-threads (older versions will
+  work as long as :timeout is not used)
+
+= 2.5.0 [rescinded]
+
+* this added a now-rescinded compatibility layer for the :timeout
+  option in try-pop-queue that caused a hard crash in ccl
+
+= 2.4.4
+
+* fixed certain (probably rare) complex uses of task-handler-bind
+* optimizations from smaller generated code size
+
+= 2.4.3
+
+* worked around ECL compiler bug (note the repository ECL is still
+  needed for bordeaux-threads, and ECL still has threading bugs)
+* removed sbcl-1.1.6 workaround; this version is now prohibited
+* ptree-lambda-list-keyword-error now reports all lambda list keywords
+* fixed unbound slot error during ptree-undefined-function-error
+  report when ptree-computed-p or call-ptree passed a nonexistent node
+
+= 2.4.2
+
+* printed kernel now shows :use-caller status
+* various optimizations
+
+= 2.4.1
+
+* fixed tests on abcl
+
+= 2.4.0
+
+* plet now exploits type declarations
+* defpun*, defpun/type*, and psort* are now deprecated -- instead use
+  the unstarred versions and pass `:use-caller t' to make-kernel
+* parallel compilation is now safer
+
+= 2.3.7
+
+* fixed a warning on non-sbcl implementations
+
+= 2.3.6
+
+* recent workaround for sbcl-1.0.53 now covers all cases
+
+= 2.3.5
+
+* added workaround for compilation failure on sbcl-1.0.53 and older
+* fixed a test for older sbcl versions lacking an `abort' restart
+
+= 2.3.4
+
+* improved defpun performance
+* added workaround for sbcl-1.1.6 issue
+
+= 2.3.3
+
+* added support for sbcl-1.0.42 and older on x86 and x86-64
+
+= 2.3.2
+
+* improved stealing scheduler performance
+
+= 2.3.1
+
+* issue a compile-time deprecation warning when make-queue or
+  make-channel is called with one argument
+
+= 2.3.0
+
+* make-queue and make-channel now accept a :fixed-capacity argument
+  for limiting the number of elements stored
+
+* make-queue now accepts an :initial-contents argument
+
+* passing a single argument to make-queue or make-channel is
+  deprecated; a &rest hack is present for backward compatibility
+
+* added function queue-full-p
+
+= 2.2.1
+
+* added lockless queue support for LispWorks; enable it through
+  feature :lparallel.with-stealing-scheduler
+
+= 2.2.0
+
+* exported types: kernel, channel, ptree
+
+* added ptree-computed-p -- query the computed state of a ptree node
+
+* make-kernel now aborts cleanly when a worker fails to initialize,
+  e.g. when make-thread fails or when a :context function aborts
+
+* check-kernel now returns a kernel instance
+
+* added a front-end lock to some ptree functions -- removes the
+  requirement that some calls be exclusive
+
+* improved performance of functions defined by defpun
+
+= 2.1.4
+
+* accept function symbols in pcount, pfind, premove
+* fixed pfind not accepting :test and :test-not
+
+= 2.1.3
+
+* fixed image created by ccl:save-application
+* pnotany and pnotevery now accept a symbol as a predicate
+
+= 2.1.2
+
+* The stealing scheduler is now lockless under Clozure CL. This is not
+  enabled by default, as it uses a few unexported symbols in the CCL
+  package. Enable it by adding :lparallel.with-stealing-scheduler to
+  *features*. The latest CCL from svn is required.
+
+= 2.1.1
+
+* minor documentation tweaks and other cleanup
+
+= 2.1.0
+
+* added readers kernel-name and kernel-context
+* added restart kill-errors to workers -- removes debugger popups
+* attempting to submit a task to an ended kernel now signals an error
+* suicidal calls to kill-tasks inside a worker are now permitted
+
+= 2.0.2
+
+* handle *read-default-float-format* in tests and benchmarks
+
+= 2.0.1
+
+* improved pmap-into performance on sbcl
+
+= 2.0.0
+
+* keyword arguments to psort besides :key have been replaced with a
+  single :granularity argument; the old arguments are now ignored
+
+* removed deprecated aliases from 1.2.0 and 1.3.0 (you may not be
+  aware of them since they haven't been listed in the documentation)
+
+* A function defined with defpun is now optimized for N worker threads
+  where N is the number of cores. The old behavior is available with
+  defpun*, which defines a function that is optimized for N-1 workers
+  (and has less overhead).
+
+* added psort* -- like psort but targets N-1 workers
+
+* improved performance of psort
+
+* task categories are now compared with eql; same for ptree node ids
+
+= 1.7.1
+
+* exiting CCL while a kernel exists no longer generates warnings
+* preserved lambda list info for a function defined with defpun when
+  no lambda list keywords are present
+* nested chain calls no longer cause multiple values to be discarded
+* error for undefined ptree node now signals in the proper context
+* reduced overhead for promises and futures; other optimizations
+
+= 1.7.0
+
+* added pdotimes
+* optimized cognate functions and macros when they are called inside
+  worker threads; e.g. pmap in (future (pmap ...)) no longer blocks
+  a worker
+
+= 1.6.3
+
+* add CLISP support
+
+= 1.6.2
+
+* fixed tests on abcl
+
+= 1.6.1
+
+* update and clarify docs
+
+= 1.6.0
+
+* added clear-ptree-errors -- for resuming after an error
+* added clear-ptree -- for recomputing from scratch
+* improved task handling for ptrees
+* :lparallel now in *features* after load
+* defpun no longer transforms pfuncall forms
+
+= 1.5.5
+
+* in Allegro, end-kernel is no longer required before exit
+* ptree-fn now accepts non-symbol node identifiers
+
+= 1.5.4
+
+* pmaps had sometimes rejected symbol as function
+
+= 1.5.3
+
+* Allegro fixed
+
+= 1.5.2
+
+* handle nil kernel in task-categories-running
+* kernel-bindings was returning superfluous bindings
+
+= 1.5.1
+
+* disable the new open coding on ABCL, which fails to compile uses of it
+
+= 1.5.0
+
+* pmap and pmap-into are now open-coded in the case of 1 vector being
+  mapped to a vector -- allows a large performance boost in some CL
+  implementations (like SBCL) when array types are known
+
+* SBCL is now able to terminate when live kernel(s) exist --
+  previously, end-kernel needed to be called on all kernels before
+  exiting (which is good practice but is no longer required)
+
+* added try-receive-result -- non-blocking version of receive-result
+
+= 1.4.5
+
+* include fix for sbcl map-into bug #1001043
+
+= 1.4.3
+
+* compensate for upcoming sbcl thread changes (only affects tests)
+* documentation updates
+
+= 1.4.2
+
+* functions defined with defpun now report argument names in slime et al
+* added defpun/type, typed version of defpun
+
+= 1.4.1
+
+* fixed defpun benchmarks
+
+= 1.4.0
+
+* added function task-categories-running
+* new special variable *debug-tasks-p* -- setting it to false will
+  transfer errors instead of invoking the debugger inside tasks;
+  default is true
+* added convenience function invoke-transfer-error for local control
+  over debugging tasks:
+    (task-handler-bind ((error #'invoke-transfer-error)) ...)
+    (task-handler-bind ((error #'invoke-debugger)) ...)
+
+= 1.3.3
+
+* internal cleanup
+
+= 1.3.2
+
+* add a few profile functions
+* doc tweak
+
+= 1.3.1
+
+* fixed tests on abcl
+
+= 1.3.0
+
+* new support for fine-grained parallelism with `defpun'
+* new work-stealing model with lockless queues and optional spinning;
+  enabled by default on SBCL, others default to central queue
+* added pfind, pcount, plet-if, pfuncall
+* fixed redundant restart in `chain'
+* `fulfill' now accepts non-promises (never succeeds)
+* removed high optimizations exposed in some API functions
+* added shell script for unthrottling CPUs in Linux
+* renamed *kernel-task-category* -> *task-category*
+          *kernel-task-priority* -> *task-priority*
+           kernel-handler-bind   -> task-handler-bind
+           preduce/partial       -> preduce-partial
+  old names are still available
+
+= 1.2.3
+
+* for promises created with (promise), fixed intermittent error during
+  high contention on some SBCL Linux machines; fixes flood-test failure
+
+= 1.2.2
+
+* (pmap nil ...) was accidentally pessimized in the many-parts case
+
+= 1.2.1
+
+* more consistent end-kernel behavior -- ensured that no more tasks
+  are executed once an idle state is detected
+
+= 1.2.0
+
+* added function cancel-timeout; submit-timeout now returns a timeout object
+* renamed emergency-kill-tasks to kill-tasks; old name is still available
+* minor optimization to ptrees
+* added type checks to psort arguments
+* switched test framework to eos
+
+= 1.1.0
+
+* added :wait option to end-kernel -- block until the kernel has shut down
+  (please read the documentation for end-kernel before using)
+* bound *print-circle* to t when printing a kernel -- avoids SBCL + SLIME
+  crash when evaluating the single form (setf *kernel* (make-kernel ...))
+
+= 1.0.12
+
+* improved some tests (pmap-into-test, flood-test)
+* minor cleanup
+
+= 1.0.11
+
+* slightly smaller footprint for futures and speculations
+* better handling of edge cases in some tests
+
+= 1.0.10
+
+* fixed a test (sleeping-worker-replacement-test)
+
+= 1.0.9
+
+* non-error conditions now recognized during recursive handling
+
+= 1.0.8
+
+* handle zero-arity special case for pmap-into and pmaplist-into
+
+= 1.0.7
+
+* minor cleanup
+
+= 1.0.6
+
+* removed needless kernel handler in delay
+* various minor cleanup
+
+= 1.0.5
+
+* better README and .asd description
+
+= 1.0.4
+
+* added description fields to .asd file and augment README
+* error for an invalid task priority is now correctable
+
+= 1.0.3
+
+* benchmarks now working with ABCL
+* better handling of non-array/non-list result sequences in pmap-into
+
+= 1.0.2
+
+* fix non-array/non-list result sequences in pmap-into
+
+= 1.0.1
+
+* clarified docs
+* trivial cleanup
+
+= 1.0.0
+
+* birthday
