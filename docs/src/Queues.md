@@ -1,4 +1,4 @@
-Queues
+## Queues
 
 The following symbols are exported by the lparallel.queue package. They are not included in the lparallel package.
 

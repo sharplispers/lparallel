@@ -1,4 +1,4 @@
-API
+## API
 
 The lparallel API is divided into five packages:
 

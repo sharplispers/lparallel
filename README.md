@@ -14,7 +14,7 @@ lparallel is a library for parallel programming in Common Lisp, featuring
   * task killing by category
   * integrated timeouts
 
-See http://lparallel.org for documentation and examples.
+See https://sharplispers.github.io/lparallel/ for documentation and examples.
 
 ### Running
 
@@ -22,8 +22,10 @@ lparallel should run on any Common Lisp implementation supported by
 bordeaux-threads. The following implementations successfully pass the
 test suite:
 
+  * ABCL
   * Allegro
   * Clozure
+  * ECL
   * LispWorks
   * SBCL
 
