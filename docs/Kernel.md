@@ -1,4 +1,4 @@
-Kernel
+## Kernel
 
 In the context of lparallel, a kernel is an abstract entity that schedules and executes tasks. The lparallel kernel API is meant to describe parallelism in a generic manner.
 
@@ -27,7 +27,7 @@ A task is a function designator together with arguments to the function. To exec
 ; => 7
 ```
 
-If you have not created a kernel (if *kernel* is nil) then upon evaluating the above you will receive an error along with a restart offering to make a kernel for you. Evaluation commences once a kernel is created.
+If you have not created a kernel (if `*kernel*` is nil) then upon evaluating the above you will receive an error along with a restart offering to make a kernel for you. Evaluation commences once a kernel is created.
 
 Multiple tasks may be submitted on the same channel, though the results are not necessarily received in the order in which they were submitted. receive-result receives one result per call.
 
@@ -85,7 +85,7 @@ Binding dynamic variables for use inside tasks may be done on either a per-task 
                            (bar)))))
 ```
 
-This saves the current value of *foo* and, inside the task, binds *foo* to that value for the duration of (bar). You may wish to write a submit-with-my-bindings function to suit your particular needs.
+This saves the current value of `*foo*` and, inside the task, binds `*foo*` to that value for the duration of (bar). You may wish to write a submit-with-my-bindings function to suit your particular needs.
 
 To establish permanent dynamic bindings inside workers (thread-local variables), use the :bindings argument to make-kernel, which is an alist of (var-name . value-form) pairs. Each value-form is evaluated inside each worker when it is created. (So if you have two workers, each value-form will be evaluated twice.)
 
@@ -112,5 +112,4 @@ For more complex scenarios of establishing worker context, a :context function m
   (submit-task channel (lambda () (list *foo* *bar*)))
   (receive-result channel))
 ; => (99 100)
-
 ```
