@@ -1,3 +1,4 @@
+## Changes
 
 lparallel-2.8.0 released
 Posted on May 8, 2015 by lparallel	
@@ -69,6 +70,7 @@ Posted on November 5, 2012 by lparallel
 
 Below is another example of Concurrent Hello World. The macros receive and run are just 9 lines each, given below the fold.
 
+```lisp
 (defpackage :example (:use :cl :node))
 (in-package :example)
 
@@ -97,6 +99,7 @@ Below is another example of Concurrent Hello World. The macros receive and run a
       (make-node 'hello hello-queue world-queue)
       (make-node 'world world-queue hello-queue)
       (send hello-queue :say-hello n))))
+```
 
 Continue reading →
 Posted in Uncategorized	| 5 Comments
@@ -157,6 +160,7 @@ Posted on June 24, 2012 by lparallel
 
 When an evaluation fails or is interrupted, it may be convenient to automatically kill tasks created during the evaluation. One use for this might be for debugging a set of long-running tasks. Here is a solution using alexandria’s unwind-protect-case.
 
+```lisp
 (defpackage :example (:use :cl :lparallel :alexandria))
 (in-package :example)
 
@@ -180,6 +184,7 @@ CL-USER> (example::foo) ; ... then hit C-c-c
 WARNING: lparallel: Replacing lost or dead worker.
 WARNING: lparallel: Replacing lost or dead worker.
 ; Evaluation aborted on NIL.
+```
 
 As always, worker threads are regenerated after being killed.
 Posted in Uncategorized	| 1 Comment
@@ -195,6 +200,7 @@ Communicating via conditions
 
 Because task handlers are called immediately when a condition is signaled inside a task, condition handling offers a way to communicate between tasks and the thread which created them. Here is a task which transfers data by signaling:
 
+```lisp
 (defpackage :example (:use :cl :lparallel :lparallel.queue))
 (in-package :example)
 
@@ -211,12 +217,14 @@ Because task handlers are called immediately when a condition is signaled inside
   (pop-queue data))
 
 ; => 99
+```
 
 receive-result has been placed outside of task-handler-bind to emphasize that handlers are bundled at the point of submit-task. (It doesn’t matter where receive-result is called.)
 Multiple kernels
 
 It may be advantageous to have a kernel devoted to particular kinds of tasks. For example one could have specialized channels and futures dedicated to IO.
 
+```lisp
 (defvar *io-kernel* (make-kernel 16))
 
 (defun make-io-channel ()
@@ -226,6 +234,7 @@ It may be advantageous to have a kernel devoted to particular kinds of tasks. Fo
 (defmacro io-future (&body body)
   `(let ((*kernel* *io-kernel*))
      (future ,@body)))
+```
 
 Since a channel remembers its associated kernel, submit-task and receive-result do not depend upon the value of *kernel*. In the promise API, only future and speculate need *kernel*.
 Posted in Uncategorized	| Leave a comment
@@ -284,7 +293,9 @@ Posted in Uncategorized	| Leave a comment
 lparallel is now part of Quicklisp
 Posted on November 7, 2011 by lparallel	
 
+```lisp
 (ql:quickload :lparallel)
+```
 
 Posted in Uncategorized	| Leave a comment
 Welcome
