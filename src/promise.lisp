@@ -262,7 +262,12 @@ If `object' is a chain, call `fulfilledp' on the chained object.
 If `object' is not a promise and not a chain, return true."
   (declare #.*normal-optimize*)
   (typecase object
-    (promise-base (not (eq (result object) +no-result+)))
+    (promise-base (let ((result (result object)))
+                    (if (eq result +no-result+)
+                        nil
+                        (typecase (first result)
+                          (%chain (fulfilledp (chain-object (first result))))
+                          (otherwise t)))))
     (%chain       (fulfilledp (chain-object object)))
     (otherwise    t)))
 
