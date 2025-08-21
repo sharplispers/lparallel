@@ -1,0 +1,382 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Kernel - lparallel</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">lparallel</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="kernel"><a class="header" href="#kernel">Kernel</a></h2>
+<p>[special variable] <strong>*debug-tasks-p*</strong></p>
+<p>If true (the default), the debugger is invoked when an error goes
+unhandled inside a task, i.e. when the handlers established by
+`task-handler-bind’ (if any) do not handle it.</p>
+<p>If false, unhandled errors from tasks are automatically transferred to
+their parent thread (and/or any dependent threads) via the
+`transfer-error’ restart. This is for convenience — sometimes you
+wish to avoid N debugger popups arising from N errors in N worker
+threads.</p>
+<p>For local control over debugger invocation, bind a task handler:</p>
+<p>(task-handler-bind ((error #’invoke-debugger)) …)</p>
+<p>(task-handler-bind ((error #’invoke-transfer-error)) …)</p>
+<p>[special variable] <strong>*kernel*</strong></p>
+<p>The current kernel, or nil.</p>
+<p>[special variable] <strong>*kernel-spin-count*</strong></p>
+<p>Default value of the `spin-count’ argument to `make-kernel’.</p>
+<p>[special variable] <strong>*task-category*</strong></p>
+<p>See `kill-tasks’. Default value is `:default’.</p>
+<p>[special variable] <strong>*task-priority*</strong></p>
+<p>When bound to `:low’, the kernel schedules submitted tasks at low
+priority. Default value is `:default’.</p>
+<p>[function] <strong>broadcast-task</strong> <em><code>function</code></em> <code>&amp;rest</code> <em><code>args</code></em></p>
+<p>Wait for current and pending tasks to complete, if any, then
+simultaneously execute the given task inside each worker. Wait until
+these tasks finish, then return the results in a vector.</p>
+<p>Calling `broadcast-task’ from inside a worker is an error.</p>
+<p>[function] <strong>cancel-timeout</strong> <em><code>timeout</code></em> <em><code>timeout-result</code></em></p>
+<p>Attempt to cancel a timeout. If successful, the channel passed to
+`submit-timeout’ will receive `timeout-result’.</p>
+<p>At most one call to `cancel-timeout’ will succeed; others will be
+ignored. If the timeout has expired on its own then `cancel-timeout’
+will have no effect.</p>
+<p>`cancel-timeout’ is not available in ABCL.</p>
+<p>`submit-timeout’ and `cancel-timeout’ are deprecated; use the new
+`:timeout’ option in `try-receive-result’.</p>
+<p>[function] <strong>check-kernel</strong></p>
+<p>Ensures the value of `*kernel*’ is a kernel instance. Provides
+the MAKE-KERNEL and STORE-VALUE restarts. Returns `*kernel*’.</p>
+<p>[function] <strong>end-kernel</strong> <code>&amp;key</code> <em><code>wait</code></em></p>
+<p>Sets `*kernel*’ to nil and ends all workers gracefully.</p>
+<p>`end-kernel’ should not be used as a substitute for properly waiting
+on tasks with `receive-result’ or otherwise.</p>
+<p>If `wait’ is nil (the default) then `end-kernel’ returns
+immediately. Workers are waited upon by a separate shutdown manager
+thread.</p>
+<p>If `wait’ is non-nil then `end-kernel’ blocks until all workers
+are finished. No shutdown manager thread is created.</p>
+<p>A list of the implementation-defined worker thread objects is returned.
+If `wait’ is nil then the shutdown manager thread is also returned as
+the first element in the list.</p>
+<p>Note that creating and destroying kernels is relatively expensive. A
+kernel typically exists for lifetime of the Lisp process. Having more
+than one kernel is fine — simply use `let’ to bind a kernel instance
+to `*kernel*’ when you need it. Use `kill-tasks’ to
+terminate deadlocked or infinite looping tasks.</p>
+<p>[function] <strong>invoke-transfer-error</strong> <em><code>error</code></em></p>
+<p>Equivalent to (invoke-restart ‘transfer-error error).</p>
+<p>This is a convenience function for use in `task-handler-bind’.</p>
+<p>[function] <strong>kernel-bindings</strong></p>
+<p>Return the bindings passed to `make-kernel’.</p>
+<p>[function] <strong>kernel-context</strong></p>
+<p>Return the context passed to `make-kernel’.</p>
+<p>[function] <strong>kernel-name</strong></p>
+<p>Return the name passed to `make-kernel’.</p>
+<p>[function] <strong>kernel-worker-count</strong></p>
+<p>Return the number of workers in the current kernel.</p>
+<p>[function] <strong>kernel-worker-index</strong></p>
+<p>If called from inside a worker, return the worker’s assigned index,
+ranging from 0 to one less than (kernel-worker-count).</p>
+<p>If not called from inside a worker, return nil.</p>
+<p>[function] <strong>kill-tasks</strong> <em><code>task-category</code></em> <code>&amp;key</code> <em><code>dry-run</code></em></p>
+<p>This is an expensive function which should only be used in exceptional
+circumstances.</p>
+<p>Every task has an associated task category. When a task is submitted, it
+is assigned the category of `*task-category*’ which has a
+default value of `:default’.</p>
+<p>`kill-tasks’ interrupts running tasks whose category is `eql’ to
+`task-category’. The corresponding worker threads are killed and
+replaced. Pending tasks are not affected.</p>
+<p>If you don’t know what to pass for `task-category’ then you should
+probably pass `:default’, though this may kill more tasks than you
+wish. Binding `*task-category*’ around `submit-task’ enables
+targeted task killing.</p>
+<p>If `dry-run’ is nil, the function returns the number of tasks killed.</p>
+<p>If `dry-run’ is non-nil then no tasks are killed. In this case the
+return value is the number of tasks that would have been killed if
+`dry-run’ were nil.</p>
+<p>`kill-tasks’ is not available in ABCL.</p>
+<p>[function] <strong>make-channel</strong> <code>&amp;rest</code> <em><code>args</code></em></p>
+<p>Create a channel for submitting and receiving tasks. The current value
+of `*kernel*’ is stored for use in `submit-task’.</p>
+<p>By default there is no limit on the channel capacity. Passing a
+`fixed-capacity’ keyword argument limits the capacity to the value
+passed.</p>
+<p>Note that a fixed capacity channel may cause a deadlocked kernel if
+`receive-result’ is not called a sufficient number of times.</p>
+<p>[function] <strong>make-kernel</strong> <em><code>worker-count</code></em> <code>&amp;key</code> <em><code>name</code></em>
+<em><code>bindings</code></em> <em><code>context</code></em> <em><code>spin-count</code></em> <em><code>use-caller</code></em></p>
+<p>Create a kernel with `worker-count’ number of worker threads.</p>
+<p>`name’ is a string identifier for this kernel which is reported by
+`print-object’. Worker threads will also be given this name, shown in
+`bordeaux-threads:all-threads’.</p>
+<p>`bindings’ is an alist for establishing thread-local variables inside
+worker threads. By default workers will have *standard-output* and
+*error-output* bindings.</p>
+<p>Dynamic context for each worker may be established with the function
+`context’. The argument passed to `context’ is a function which
+must be funcalled. It begins the worker loop and will not return until
+the worker exits. The default value of `context’ is #’funcall. The
+special variables in `bindings’ are available inside the `context’
+function.</p>
+<p>When a worker discovers that no tasks are available, `spin-count’ is
+the number of task-searching iterations done by the worker before
+sleeping.</p>
+<p>If `use-caller’ is true (default is false) then in certain situations
+the calling thread may be enlisted to steal work from worker threads.
+This is an optimization strategy that currently applies only during the
+execution of functions defined by `defpun’ and `defpun/type’.
+Typically in this case the number of workers will be one less than the
+number of cores/CPUs.</p>
+<p>A kernel will not be garbage collected until `end-kernel’ is called.</p>
+<p>[function] <strong>receive-result</strong> <em><code>channel</code></em></p>
+<p>Remove a result from `channel’. If nothing is available the call will
+block until a result is received.</p>
+<p>[function] <strong>submit-task</strong> <em><code>channel</code></em> <em><code>function</code></em> <code>&amp;rest</code> <em><code>args</code></em></p>
+<p>Submit a task through `channel’ to the kernel stored in `channel’.</p>
+<p>[function] <strong>submit-timeout</strong> <em><code>channel</code></em> <em><code>timeout-seconds</code></em>
+<em><code>timeout-result</code></em></p>
+<p>Effectively equivalent to</p>
+<p>(submit-task channel (lambda () (sleep timeout-seconds) timeout-result))</p>
+<p>The difference is that `submit-timeout’ does not occupy a worker
+thread.</p>
+<p>A timeout object is returned, which may be passed to
+`cancel-timeout’.</p>
+<p>`submit-timeout’ and `cancel-timeout’ are deprecated; use the new
+`:timeout’ option in `try-receive-result’.</p>
+<p>[function] <strong>task-categories-running</strong></p>
+<p>Return a vector containing the task category currently running for each
+worker.</p>
+<p>[macro] <strong>task-handler-bind</strong> <em><code>clauses</code></em> <code>&amp;body</code> <em><code>body</code></em></p>
+<p>Like `handler-bind’ but handles conditions signaled inside tasks that
+were created in `body’.</p>
+<p>[function] <strong>try-receive-result</strong> <em><code>channel</code></em> <code>&amp;key</code> <em><code>timeout</code></em></p>
+<p>If `channel’ has a result then remove it and return (values result
+t).</p>
+<p>If no result is available and `timeout’ is given, then wait up to
+`timeout’ seconds for a result.</p>
+<p>If the channel is empty and the timeout has expired, or if the channel
+is empty and no timeout was given, return (values nil nil).</p>
+<p>Providing a nil or non-positive value of `timeout’ is equivalent to
+providing no timeout.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="API.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="API-Promises.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="API.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="API-Promises.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Handling - lparallel</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">lparallel</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="handling"><a class="header" href="#handling">Handling</a></h2>
+<p>Handling conditions in lparallel is done with task-handler-bind. It is just like handler-bind except that it handles conditions signaled from inside parallel tasks.</p>
+<pre><code class="language-lisp">(defpackage :example (:use :cl :lparallel))
+(in-package :example)
+
+(define-condition foo-error (error) ())
+
+(task-handler-bind ((foo-error (lambda (e)
+                                 (declare (ignore e))
+                                 (invoke-restart 'number-nine))))
+  (pmapcar (lambda (x)
+             (declare (ignore x))
+             (restart-case (error 'foo-error)
+               (number-nine () "number nine")))
+           '(1 2 3)))
+
+; =&gt; ("number nine" "number nine" "number nine")
+</code></pre>
+<p>Though one may be tempted to merge handler-bind and task-handler-bind with some shadowing magic, in general the handlers which need to reach inside tasks will not always match the handlers that are suitable for the current thread. It is also useful to explicitly flag asynchronous handlers that require thread-safe behavior.</p>
+<p>In Common Lisp, the debugger is invoked when an error goes unhandled. By default lparallel mirrors this behavior with regard to tasks: when an error is signaled inside a task, and the error is not handled by one of the task handlers established by task-handler-bind, then the debugger is invoked.</p>
+<p>However there is an alternate behavior which may be more appropriate depending upon the situation: automatically transferring errors. Setting <code>*debug-tasks-p*</code> to false will transfer task errors to threads which attempt to obtain the failed results. Suppose you have several parallel tasks running and each task signals an error. If <code>*debug-tasks-p*</code> is false then the debugger will be invoked just once (typically in the parent thread) instead of several times (once for each task).</p>
+<p>If <code>*debug-tasks-p*</code> is true then you may still elect to transfer the error yourself. Inside each task there is a restart called TRANSFER-ERROR, which you will see in the debugger. (When <code>*debug-tasks-p*</code> is false the restart is simply invoked for you.) The following shows the Clozure + SLIME environment.</p>
+<pre><code class="language-lisp">(pmapcar (lambda (x)
+           (when (evenp x)
+             (restart-case (error 'foo-error)
+               (number-nine ()
+                 :report "Who was to know?"
+                 "number nine"))))
+         '(1 2 3))
+=&gt;
+Error EXAMPLE::FOO-ERROR
+   [Condition of type EXAMPLE::FOO-ERROR]
+
+Restarts:
+ 0: [NUMBER-NINE] Who was to know?
+ 1: [TRANSFER-ERROR] Transfer this error to a dependent thread, if one exists
+ 2: [ABORT-BREAK] Reset this thread
+ 3: [ABORT] Kill this thread
+</code></pre>
+<p>The presence of the TRANSFER-ERROR restart indicates that we are inside a task. After inspecting the backtrace to our satisfaction, it’s time to hit TRANSFER-ERROR. In our example the top-level thread is already waiting for the result, so the debugger will appear again after we transfer.</p>
+<pre><code class="language-lisp">=&gt;
+Error FOO-ERROR
+   [Condition of type FOO-ERROR]
+
+Restarts:
+ 0: [RETRY] Retry SLIME interactive evaluation request.
+ 1: [*ABORT] Return to SLIME's top level.
+ 2: [ABORT-BREAK] Reset this thread
+ 3: [ABORT] Kill this thread
+</code></pre>
+<p>The familiar SLIME restarts are there again. We are back in the top-level thread.</p>
+<p>The behavior specified by <em>debug-tasks-p</em> may be locally overridden with task-handler-bind. To always transfer errors,</p>
+<pre><code class="language-lisp">(task-handler-bind ((error #'invoke-transfer-error)) ...)
+</code></pre>
+<p>Likewise to always invoke the debugger for unhandled errors,</p>
+<pre><code class="language-lisp">(task-handler-bind ((error #'invoke-debugger)) ...)
+</code></pre>
+<p>More on threads</p>
+<p>In the second example, what if we selected the ABORT restart (“Kill this thread”) instead of transferring the error? This would not be dangerous—the killed worker would be automatically replaced with a new one—but it would be a little rude. The top-level thread would signal TASK-KILLED-ERROR instead of FOO-ERROR. In our example this does not matter, but by signaling TASK-KILLED-ERROR we potentially spoil a handler’s lifelong dream of handling a FOO-ERROR.
+Killing tasks</p>
+<p>Occasionally there may be a task which has entered a deadlock (which can happen with circular references) or an infinite loop. Don’t panic! Try</p>
+<pre><code class="language-lisp">(kill-tasks :default)
+</code></pre>
+<p>This is a blunt weapon, however, because passing :default may cause unrelated tasks to be killed.</p>
+<p>Each task is given a task category identifier. When a task is submitted, it is assigned the category of <em>task-category</em> which has a default value of :default. The argument to kill-tasks is a task category. Any running task whose category is eql to the argument passed will be killed. Pending tasks are not affected.</p>
+<p>To avoid killing unrelated tasks, bind <code>*task-category*</code> around submit-task calls.</p>
+<pre><code class="language-lisp">(let ((channel (make-channel)))
+  ;; ...
+  (let ((*task-category* 'my-stuff))
+    (submit-task channel (lambda () (loop))))  ; oops!
+  (receive-result channel))
+</code></pre>
+<p>This is hung at receive-result. We can recover by calling</p>
+<pre><code class="language-lisp">(kill-tasks 'my-stuff)
+</code></pre>
+<p>which will only kill our looping task, assuming my-stuff is not used as a task category elsewhere in the same package.</p>
+<p>Keep in mind that killing tasks is expensive and should only be done in exceptional circumstances. Not only is thread creation expensive (for the worker replacements), but heavy locking is required as well.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="Kernel.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="Promises.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="Kernel.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="Promises.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
