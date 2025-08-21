@@ -1,4 +1,4 @@
-Benchmarks
+## Benchmarks
 
 The following benchmarks were conducted on SBCL / Linux / Core-i7 3.4GHz and Clozure / Darwin / Core 2 Duo 1.8GHz. On SBCL the new work-stealing model with lockless queues is enabled (the default on SBCL). Clozure uses the central queue model.
 
@@ -8,6 +8,7 @@ All arrays are of type (simple-array single-float (*)). The rightmost column is 
 
 SBCL / Linux / 4 cores
 
+```
 size     10 | op SIN      | MAP                 3
 size     10 | op SIN      | MAP                 2
 size     10 | op SIN      | MAP                 3
@@ -413,9 +414,11 @@ n    200 | PMATRIX-MUL        33465
 n    200 | PMATRIX-MUL        33445
 n    200 | PMATRIX-MUL        33444
 n    200 | PMATRIX-MUL        33478
+```
 
 Clozure / Darwin / 2 cores
 
+```
 size     10 | op SIN      | MAP                19
 size     10 | op SIN      | MAP                20
 size     10 | op SIN      | MAP                19
@@ -821,3 +824,4 @@ n    200 | PMATRIX-MUL       166732
 n    200 | PMATRIX-MUL       150359
 n    200 | PMATRIX-MUL       155815
 n    200 | PMATRIX-MUL       154714
+```

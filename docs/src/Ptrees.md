@@ -1,9 +1,10 @@
-Ptrees
+## Ptrees
 
 In cases where futures must wait upon the results of other futures, it may be more suitable to use a ptree instead. A ptree also has built-in support for retrying failed computations.
 
 A ptree is a computation represented by a tree together with functionality to execute the tree in parallel. The simplest way to build and execute a ptree is with the ptree macro. Its syntax matches that of flet.
 
+```lisp
 (defpackage :example (:use :cl :lparallel))
 (in-package :example)
 
@@ -14,13 +15,16 @@ A ptree is a computation represented by a tree together with functionality to ex
   area)
 
 ; => 63
+```
 
 This performs a parallelized version of the computation
 
+```lisp
 (* (+ 7 (* 2 1))
    (+ 5 (* 2 1)))
 
 ; => 63
+```
 
 Each function in the ptree macro corresponds to a node in the generated tree. The relationships between the nodes are determined by the parameter names. In this example the area node has two child nodes labeled width and height; the width and height nodes share the same child node named border; and the border node has no children.
 
@@ -30,6 +34,7 @@ The function associated with a ptree node should be a pure function with regard 
 
 Futures could also be used parallelize our example computation.
 
+```lisp
 (let* ((border (future 1))
        (width  (future (+ 7 (* 2 (force border)))))
        (height (future (+ 5 (* 2 (force border)))))
@@ -37,6 +42,7 @@ Futures could also be used parallelize our example computation.
   (force area))
 
 ; => 63
+```
 
 What is the purpose of ptrees if futures can do the same thing? Futures are inadequate for large trees with interconnected relationships. A worker thread is effectively hijacked whenever a future waits on another future. A new temporary worker could be spawned to compensate for each worker that enters a waiting state, however in general that is an expensive solution which does not scale well.
 
@@ -44,6 +50,7 @@ The underlying issue is that futures have no knowledge of the computation tree i
 
 Ptrees may be built dynamically as follows.
 
+```lisp
 (let ((tree (make-ptree)))
   (ptree-fn 'area   '(width height) (lambda (w h) (* w h))       tree)
   (ptree-fn 'width  '(border)       (lambda (b)   (+ 7 (* 2 b))) tree)
@@ -52,6 +59,7 @@ Ptrees may be built dynamically as follows.
   (call-ptree 'area tree))
 
 ; => 63
+```
 
 This code resembles the expansion of the ptree macro example above. Note that a node identifier need not be a symbol; any object suitable for eql comparison will do.
 
