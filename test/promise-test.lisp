@@ -75,7 +75,14 @@
          (b (chain a)))
     (fulfill b 3)
     (is (eql 3 (force b)))
-    (is (eql 3 (force a)))))
+    (is (eql 3 (force a))))
+  (let* ((a (promise))
+         (b (promise)))
+    (fulfill b (chain a))
+    (is (not (fulfilledp b)))
+    (fulfill a 17)
+    (is (fulfilledp a))
+    (is (fulfilledp b))))
 
 (full-test force-chain-test
   (let ((f (delay (chain (delay 3)))))
