@@ -47,6 +47,7 @@
                 #:atomic-integer-value)
   (:export #:make-kernel
            #:check-kernel
+           #:ensure-kernel
            #:end-kernel
            #:kernel-worker-count
            #:kernel-worker-index
