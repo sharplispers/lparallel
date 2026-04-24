@@ -51,7 +51,7 @@ The underlying issue is that futures have no knowledge of the computation tree i
 Ptrees may be built dynamically as follows.
 
 ```lisp
-(let ((tree (make-ptree)))
+(let ((tree (make-ptree :test #'eq)))
   (ptree-fn 'area   '(width height) (lambda (w h) (* w h))       tree)
   (ptree-fn 'width  '(border)       (lambda (b)   (+ 7 (* 2 b))) tree)
   (ptree-fn 'height '(border)       (lambda (b)   (+ 5 (* 2 b))) tree)
@@ -61,7 +61,7 @@ Ptrees may be built dynamically as follows.
 ; => 63
 ```
 
-This code resembles the expansion of the ptree macro example above. Note that a node identifier need not be a symbol; any object suitable for eql comparison will do.
+This code resembles the expansion of the ptree macro example above. Note that a node identifier need not be a symbol; any object suitable for `eq`/`eql`/`equal`/`equalp` (default is `eql`) comparison will do.
 
 clear-ptree restores the tree to its original uncomputed state. clear-ptree-errors restores to the last pre-error state.
 

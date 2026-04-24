@@ -239,9 +239,12 @@
    "A ptree is a computation represented by a tree together with
    functionality to execute the tree in parallel."))
 
-(defun make-ptree ()
+(defun make-ptree ( &key (test #'eql) )
   "Create a ptree instance."
-  (make-ptree-instance))
+  (let ((p (make-ptree-instance)))
+    (with-ptree-slots (nodes) p
+      (setf nodes (make-hash-table :test test)))
+    p))
 
 (defun/type compute-ptree (root ptree kernel) (node ptree kernel) node
   (declare #.*normal-optimize*)
